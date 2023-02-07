@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+</head>
+<body>
+    <div class="card">
+
+        <div class="top_card">
+            <h1>Log in </h1>
+        </div>
+        <div class="below_card">
+            <h3>Give Your information*</h3>
+            <form action=""method="post"  enctype="multipart/form-data">
+                {% csrf_token %}
+                {{Image_form.as_p}}
+                {{text_form.as_p}}
+                <br>
+                    <button style=" background-color: rgb(172, 5, 102); border:none; height: 30px;  color:aliceblue; width: 70px;">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

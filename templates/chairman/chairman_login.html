@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    <title>form</title>
+</head>
+<body>
+    <div class="card">
+
+        <div class="top_card">
+            <h1>Log in </h1>
+        </div>
+        <div class="below_card">
+            <h3>Give Your information*</h3>
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
+                    <label for="email">E-mail:</label><br><br>
+                    <input type="email" id="fname" maxlength="400" size="40"
+                    placeholder="" name="name" required><br><br><br>
+                <label for="password">Password:</label><br><br>
+                <input type="password" id="fname" maxlength="60" size="40"
+                    placeholder="" name="name" required><br><br><br>
+                <button style=" background-color: rgb(172, 5, 102);
+                    border:none; height: 30px; color:aliceblue; ">NEXT</button>
+            </form>
+           
+        </div>
+    </div>
+</body>
+</html>

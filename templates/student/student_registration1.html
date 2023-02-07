@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script>
+          
+            $(function () {
+              $("#datetimepicker1").datetimepicker({
+                format: 'DD/MM/YYYY HH:mm',
+              });
+            });
+         
+         var form = document.getElementById("myForm");
+
+    form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    var data = new FormData(form);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/pdf", true);
+    xhr.setRequestHeader("Accept", "application/pdf");
+    xhr.responseType = "blob";
+    xhr.onload = function() {
+      if (this.status === 200) {
+        var blob = new Blob([this.response], { type: "application/pdf" });
+        var link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "form-data.pdf";
+        link.click();
+      }
+    };
+    xhr.send(data);
+  });
+        </script>
+    </head>
+    <body>
+        <div class="card">
+
+            <div class="top_card">
+                <h1>Registration For Your Required Semester Final</h1>
+            </div>
+            <div class="below_card">
+                <h3>Give Your information*</h3>
+                <form method="post" action="student_registration1"  >
+                    {% csrf_token %}
+                    {% for field in form %}
+                      <div>
+                        {{ field.label_tag }}<br>
+                        {{ field }}
+                      </div>
+                    {% endfor %}
+                    <br>
+                    <button style=" background-color: rgb(172, 5, 102); border:none; height: 30px;  color:aliceblue; width: 40px;">Submit</button>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>

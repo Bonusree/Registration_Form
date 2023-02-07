@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body
+        {
+            background-image: url("/static/images/new2.jpg");
+            background-repeat: no-repeat;
+            background-size: 1400px 700px;
+           
+        }
+        .f
+        {
+            margin-top: 250px;
+            margin-left: 100px;
+        }
+        a:link, a:visited {
+            background-color:  rgb(3, 102, 94);
+            color: white;
+            padding: 25px 80px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border: solid 3px rgb(3, 102, 94);
+            border-radius: 5px;
+            margin:20px;
+          }
+          
+          a:hover, a:active {
+            background-color: rgb(128, 5, 62);
+            border:none;
+          }
+    </style>
+</head>
+<body>
+    <div class="f">
+        <p>"HOME"</p>
+        <a href="student"><b>Student</b></a>
+        <a href="chairman"><b>Chairman</b></a>
+        <a href="examcontroller"><b>Exam controller</b></a>
+        <a href="hallprovost"><b>Hallprovost</b></a> 
+    </div>
+    
+</body>
+</html>
