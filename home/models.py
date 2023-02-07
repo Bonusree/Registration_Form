@@ -12,7 +12,6 @@ class CustomUser(AbstractUser):
 class student(models.Model):
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     id=models.TextField(primary_key=True)
-    #name=models.TextField(default=1, null=False)
     address=models.TextField(default=True)
     # profile_pic=models.FileField(null=False)
     session_start_year=models.DateField(null=False, default=True)
@@ -22,14 +21,12 @@ class student(models.Model):
 class chairman(models.Model):
     id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    #name=models.TextField(default=1, null=False)
     dept_name=models.CharField(max_length=150,  default=True)
     objects=models.Manager()
 
 class hallprovost(models.Model):
     id=models.AutoField(primary_key=True)
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
-    #name=models.TextField(default=1, null=False)
     hall_name=models.TextField(default=True)
     objects=models.Manager()
 

@@ -19,21 +19,21 @@ def doLogin(request):
     if request.method!="POST":
         return HttpResponse("<h2>Method Not Allowed</h2>")
     else:
-        return HttpResponse("<h2>Method is Allowed</h2>")
-        # user=Email_back_end.authenticate(request,username=request.POST.get("email"),password=request.POST.get("password"))
-        # if user!=None:
-        #     login(request,user)
-        #     if user.user_type=="1":
-        #         return HttpResponse('stuent')
-        #     elif user.user_type=="2":
-        #         return HttpResponseRedirect('chairman')
-        #     elif user.user_type=="3":
-        #         return HttpResponseRedirect('provost')
-        #     else:
-        #         return HttpResponseRedirect('exam')
-        # else:
-        #     messages.error(request,"Invalid Login Details")
-        #     return HttpResponseRedirect("/")
+        #return HttpResponse("<h2>Method is Allowed</h2>")
+        user=Email_back_end.authenticate(request,username=request.POST.get("email"),password=request.POST.get("password"))
+        if user!=None:
+            login(request,user)
+            if user.user_type=="1":
+                return HttpResponse('stuent')
+            elif user.user_type=="2":
+                return HttpResponseRedirect('chairman')
+            elif user.user_type=="3":
+                return HttpResponseRedirect('provost')
+            else:
+                return HttpResponseRedirect('exam')
+        else:
+            messages.error(request,"Invalid Login Details")
+            return HttpResponseRedirect("/")
 
 
 def GetUserDetails(request):
@@ -54,36 +54,36 @@ def add_student_save(request):
     if request.method!="POST":
         return HttpResponse("Method Not Allowed")
     else:
-        return HttpResponse("<h2>student is Allowed</h2>")
-        # form=AddStudentForm(request.POST,request.FILES)
-        # if form.is_valid():
-        #     name=form.cleaned_data["name"]
-        #     id=form.cleaned_data["id"]
-        #     username=form.cleaned_data["username"]
-        #     email=form.cleaned_data["email"]
-        #     password=form.cleaned_data["password"]
-        #     address=form.cleaned_data["address"]
-        #     session_start=form.cleaned_data["session_start"]
-        #     profile_pic=request.FILES['profile_pic']
-        #     fs=FileSystemStorage()
-        #     filename=fs.save(profile_pic.name,profile_pic)
-        #     profile_pic_url=fs.url(filename)
+        #return HttpResponse("<h2>student is Allowed</h2>")
+        form=AddStudentForm(request.POST,request.FILES)
+        if form.is_valid():
+            name=form.cleaned_data["name"]
+            id=form.cleaned_data["id"]
+            username=form.cleaned_data["username"]
+            email=form.cleaned_data["email"]
+            password=form.cleaned_data["password"]
+            address=form.cleaned_data["address"]
+            session_start=form.cleaned_data["session_start"]
+            profile_pic=request.FILES['profile_pic']
+            fs=FileSystemStorage()
+            filename=fs.save(profile_pic.name,profile_pic)
+            profile_pic_url=fs.url(filename)
 
-        #     try:
-        #         user=CustomUser.objects.create_user(username=username,password=password,email=email,name=name,user_type=1)
-        #         user.student.address=address
-        #         user.student.id=id
-        #         user.student.session_start_year=session_start
-        #         user.student.profile_pic=profile_pic_url
-        #         user.save()
-        #         messages.success(request,"Successfully Added Student")
-        #         return HttpResponseRedirect(reverse("add_student"))
-        #     except:
-        #         messages.error(request,"Failed to Add Student")
-        #         return HttpResponseRedirect(reverse("add_student"))
-        # else:
-        #     form=AddStudentForm(request.POST)
-        #     return render(request, "addStudent.html", {"form": form})
+            try:
+                user=CustomUser.objects.create_user(username=username,password=password,email=email,name=name,user_type=1)
+                user.student.address=address
+                user.student.id=id
+                user.student.session_start_year=session_start
+                user.student.profile_pic=profile_pic_url
+                user.save()
+                messages.success(request,"Successfully Added Student")
+                return HttpResponseRedirect(reverse("add_student"))
+            except:
+                messages.error(request,"Failed to Add Student")
+                return HttpResponseRedirect(reverse("add_student"))
+        else:
+            form=AddStudentForm(request.POST)
+            return render(request, "addStudent.html", {"form": form})
         
 def add_chairman(request):
     return render(request,"addchairman.html")
