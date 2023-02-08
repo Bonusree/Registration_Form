@@ -1,5 +1,5 @@
 from django import forms
-from .models import PdfFile
+from .models import *
 class sman(forms.Form):
     Email=forms.EmailField(label='email', max_length=250)
     Password=forms.CharField(label='Password', widget=forms.PasswordInput, max_length=250)
@@ -20,16 +20,24 @@ class ExampleForm(forms.Form):
 #             'class': 'form-control datetimepicker-input',
 #             'data-target': '#datetimepicker1'
 #         }), label='Birth Date')
-class Image1(forms.Form):
-    profile_photo=forms.ImageField(label='Upload Your Photo')
+class registraion(forms.Form):
+    dept_name=forms.CharField(label="dept_name",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
+    regi_no=forms.CharField(label="regi_no",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
+    phn_nmbr=forms.CharField(label="phn_nmbr",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
+    semester_no=forms.IntegerField(label="Semester no",widget=forms.TextInput(attrs={"class":"form-control"}) )
+    bank_receipt=forms.IntegerField(label="bank_receipt",widget=forms.TextInput(attrs={"class":"form-control"}) )
+    courses=forms.IntegerField(label="Number of courses",widget=forms.TextInput(attrs={"class":"form-control"}) )
+    bank_receipt_image=forms.FileField(label="Bank receipt photo",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}))
+    
 
-class Image2(forms.Form):
-    other=forms.ImageField(label='Upload Your all bankdraft as pdf')
+
+# class Image2(forms.Form):
+#     other=forms.ImageField(label='Upload Your all bankdraft as pdf')
     
 
 
 
-class PdfForm(forms.ModelForm):
-    class Meta:
-        model = PdfFile
-        fields = ['file_name', 'email', 'pdf_file']
+# class PdfForm(forms.ModelForm):
+#     class Meta:
+#         model = PdfFile
+#         fields = ['file_name', 'email', 'pdf_file']

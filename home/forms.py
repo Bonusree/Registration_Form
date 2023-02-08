@@ -1,10 +1,12 @@
 from django import forms
 
-from home.models import *
-
-class DateInput(forms.DateInput):
-    input_type = "date"
-
+from django.core.exceptions import ValidationError
+datetime=""
+def validate_date_format(value):
+    try:
+        datetime.strptime(value, '%Y-%m-%d')
+    except ValueError:
+        raise ValidationError("Incorrect date format, it should be YYYY-MM-DD")
 
 class AddStudentForm(forms.Form):
     id=forms.CharField(label="Id", max_length=50, widget=forms.TextInput(attrs={"class":"form-control"}))
@@ -15,7 +17,8 @@ class AddStudentForm(forms.Form):
 
     email=forms.EmailField(label="Email",max_length=50,widget=forms.EmailInput(attrs={"class":"form-control"}))
     password=forms.CharField(label="Password",max_length=50,widget=forms.PasswordInput(attrs={"class":"form-control"}))
-    session_start=forms.DateField(label="Session Start",widget=DateInput(attrs={"class":"form-control"}))
+    session_start=forms.DateField(label="Session Start",  validators=[validate_date_format],input_formats=['%Y-%m-%d'],
+        widget=forms.TextInput(attrs={'type': 'date'}))
     profile_pic=forms.FileField(label="Profile Pic",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}))
     dept_name=forms.CharField(label="dept_name",max_length=50,widget=forms.TextInput(attrs={"class":"form-control"}))
 

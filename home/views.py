@@ -5,9 +5,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from home.forms import *
+from .forms import *
+from student.forms import *
 from home.Email_back_end import Email_back_end
-from home.models import *
+from home.models import CustomUser
 
 def home(request):
     return render(request,"home.html")
@@ -24,7 +25,8 @@ def doLogin(request):
         if user!=None:
             login(request,user)
             if user.user_type=="1":
-                return render(request,"student/student_registration1.html")
+                form=registration1()
+                return render(request,"student/student_registration1.html",{"form":form})
             elif user.user_type=="2":
                 return render(request,"student/student_registration1.html")
             elif user.user_type=="3":
@@ -33,7 +35,8 @@ def doLogin(request):
                 return render(request,"student/student_registration1.html")
         else:
             messages.error(request,"Invalid Login Details")
-            return HttpResponseRedirect("/")
+            form=registration1()
+        return render(request,"student/student_registration1.html",{"form":form})
 
 
 def GetUserDetails(request):
@@ -69,19 +72,18 @@ def add_student_save(request):
             fs=FileSystemStorage()
             filename=fs.save(profile_pic.name,profile_pic)
             profile_pic_url=fs.url(filename)
-            return HttpResponse("add student")
-            # try:
-            #     user=CustomUser.objects.create_user(username=username,password=password,email=email,first_name=first_name,last_name=last_name, user_type=1)
-            #     user.student.address=address
-            #     user.student.id=id
-            #     user.student.session_start_year=session_start
-            #     user.student.profile_pic=profile_pic_url
-            #     user.save()
-            #     messages.success(request,"Successfully Added Student")
-            #     return HttpResponseRedirect(reverse("add_student"))
-            # except:
-            #     messages.error(request,"Failed to Add Student")
-            #     return HttpResponseRedirect(reverse("add_student"))
+            # return HttpResponse("add student")
+            try:
+                user=CustomUser.objects.create_user(username=username,password=password,email=email,first_name=first_name,last_name=last_name, user_type=1)
+                user.student.address=address
+                user.student.id=id
+                user.student.session_start_year=session_start
+                user.student.profile_pic=profile_pic_url
+                user.save()
+                messages.success(request,"Successfully Added Student")
+                return HttpResponseRedirect(reverse("add_student"))
+            except Exception as e:
+                return HttpResponse(e)      
         else:
             form=AddStudentForm(request.POST)
             return render(request, "addStudent.html", {"form": form})

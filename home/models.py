@@ -13,8 +13,8 @@ class student(models.Model):
     admin=models.OneToOneField(CustomUser,on_delete=models.CASCADE)
     id=models.TextField(primary_key=True)
     address=models.TextField(default=True)
-    profile_pic=models.FileField()
-    session_start_year=models.DateField(null=False, default=True)
+    profile_pic=models.FileField(default=True)
+    session_start_year=models.DateField(blank=True, null=True)
     dept_name=models.TextField(default=True)
     objects=models.Manager()
   

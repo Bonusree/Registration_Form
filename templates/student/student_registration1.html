@@ -50,16 +50,20 @@
             </div>
             <div class="below_card">
                 <h3>Give Your information*</h3>
-                <form method="post" action="student_registration1"  >
-                    {% csrf_token %}
-                    {% for field in form %}
-                      <div>
-                        {{ field.label_tag }}<br>
-                        {{ field }}
-                      </div>
-                    {% endfor %}
+                <form role="form" action="{% url 'regicomplete' %}" method="post" enctype="multipart/form-data">
+
+                  {% csrf_token %}
+ 
+
+                   {% for field in form %}
+                  {{ field.errors }}
+                  {{ field.label_tag }}<br>
+                  {{ field }}<br>
+                {% endfor %}
+          
+
                     <br>
-                    <button style=" background-color: rgb(172, 5, 102); border:none; height: 30px;  color:aliceblue; width: 40px;">Submit</button>
+                    <button style=" background-color: rgb(172, 5, 102); border:none; height: 30px;  color:aliceblue; width: 70px;">Submit</button>
                 </form>
             </div>
         </div>
