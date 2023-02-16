@@ -1,46 +1,88 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        .f
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <style>
+            .f
         {
-            margin: auto;
-           
-            padding: 10px;
-            background-color: red;
+            margin-top: 110px;
+            margin-left: 300px;
         }
-        .container
-        {background-color:  rgb(107, 147, 223);
+        .c {
+            margin-left: 300px;
+            margin-right:auto;
+            margin-top: 100px;
+            background-color: rgb(178, 230, 225);
+            padding: 40px ;
+            
+            box-shadow: 5px 5px rgb(168, 212, 208);
+            width: 60%;
+        
+        }
+        button, button:visited {
+            background-color:  rgb(3, 102, 94);
             color: white;
-            padding: 95px 80px;
+            padding: 35px 300px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            margin:50px;
-            border: solid 3px rgb(107, 147, 223);;
+            border: solid 3px rgb(96, 222, 211);
             border-radius: 5px;
-            
-        }
-    </style>
+            margin:20px;
+          }
+          
+          button:hover, button:active {
+            background-color: rgb(22, 222, 205);
+            border:none;
+          }
+        </style>
 </head>
 <body>
-   <div >
-    <div class="container">
-        <p>this is one</p>
-    </div>
-    <div class="container">
-        <p>this is one</p>
-    </div>
-    <div class="container">
-        <p>this is one</p>
-    </div>
+    <div class="c">
     
-   </div>
-       
-   
+          {% for item in data %}
+          <form action="{%url 'chairman_get_info'%}" method="POST">
+            {% csrf_token %}
+          <input type="hidden" name="regi_no" value="{{item.regi_no}}"/>
+          <input type="hidden" name="semester_no" value="{{item.semester_no}}"/>
+          <button class="btnclick">ID:{{item.regi_no}}, semester no:{{item.semester_no}}</button>
+        </form> 
+          {% endfor %}
+          
+         
+</div>
+        
+<!-- <script>
+  function send_data() {
+  
+    $.ajax({
+      url : 'the_url',
+      data : {
+        'csrfmiddlewaretoken' : '<the-token>',
+        'key1' : 'val1',
+      },
+      method : 'POST',
+      success : success_function // reference to below
+    });
+  
+  }
+
+  $('.btnclick').onclick()
+  {
+    var i=$(this).val;
+    alert(i);
+  }
+
+</script>
+     -->
 </body>
 </html>

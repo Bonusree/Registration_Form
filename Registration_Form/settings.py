@@ -19,9 +19,6 @@ TEMPLATE_DIR=os.path.join(BASE_DIR,'templates')
 STATIC_DIR=os.path.join(BASE_DIR,'static')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 WKHTMLTOPDF_CMD = '/path/to/my/wkhtmltopdf'
-WKHTMLTOPDF_CMD_OPTIONS = {
-    'quiet': True,
-}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -44,11 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home',
     'student',
     'chairman',
     'examController',
     'Hallprovost' ,
+    'adduser',
+    'wkhtmltopdf'
 ]
 
 MIDDLEWARE = [
@@ -139,14 +137,16 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 # Base url to serve media files
-MEDIA_URL = '/media/'
+MEDIA_URL = 'media/'
+MEDIA_ROOT= BASE_DIR #eikhane media root base_dir dewate base_dir te save hoichilo
+#
 
 # Path where media is stored
 
-STATICFILES_DIRS = [STATIC_DIR, ]
+STATICFILES_DIRS = [STATIC_DIR,]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL='home.CustomUser'
+# image kemne save korcoch dekhaite...ekhane media save korchi erpor dekhai

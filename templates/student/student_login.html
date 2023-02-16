@@ -25,14 +25,14 @@
             </div>
             <div class="below_card">
                 <h3>Give Your information*</h3>
-                <form action="{% url 'login' %}" method="post">
+                <form action="{% url 'student_login' %}" method="post">
                     {% csrf_token %}
                     <label for="email">E-mail:</label><br><br>
                     <input type="email" id="fname" maxlength="400" size="40"
-                    placeholder="" name="name" required><br><br><br>
+                    placeholder="" name="email" required><br><br><br>
                 <label for="password">Password:</label><br><br>
                 <input type="password" id="fname" maxlength="60" size="40"
-                    placeholder="" name="name" required><br><br><br>
+                    placeholder="" name="password" required><br><br><br>
                 <button style=" background-color: rgb(172, 5, 102);
                     border:none; height: 30px; color:aliceblue; ">NEXT</button>
                 </form>

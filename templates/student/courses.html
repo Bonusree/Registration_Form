@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
@@ -11,22 +12,65 @@
         <link rel="stylesheet" href="{% static 'style.css' %}" />
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function(){
+              var maxField = 10; //Input fields increment limitation
+              var addButton = $('.add_button'); //Add button selector
+              var wrapper = $('.field_wrapper'); //Input field wrapper
+              
+              
+              {% comment %} var fieldHTML = '<div ><input class="j" type="text" name="course_name" value="Course_name"/><a href="javascript:void(0);" class="remove_button">Remove courses</a><br><input type="text" name="course_code" value="course_code"/><br><input type="text" name="course_credit" value="course_credit"/><br><br></div>'; //New input field html  {% endcomment %}
+              var x = 1; //Initial field counter is 1
+              
+              //Once add button is clicked
+              $(addButton).click(function(){
+                //Check maximum number of input fields
+                if(x < maxField){ 
+                  x++; //Increment field counter
+                  document.getElementById("output").value= x;
+                  var fieldHTML = '<div ><input class="j" type="text" name="course_name'+x+'" value="Course_name"/>\
+                    <a href="javascript:void(0);" class="remove_button">Remove courses</a><br>\
+                    <input type="text" name="course_code'+x+'" value="course_code"/>\
+                    <br><input type="text" name="course_credit'+x+'" value="course_credit"/><br><br>\</div>'; //New input field html 
+                  $(wrapper).append(fieldHTML); //Add field html
+                }
+              });
+              //Once remove button is clicked abar regi koro
+              $(wrapper).on('click', '.remove_button', function(e){
+                e.preventDefault();
+                $(this).parent('div').remove(); //Remove field html
+                x--; //Decrement field counter
+                document.getElementById("output").value= x;
+              });
+              document.getElementById("output").value = x;
+              console.log(x);
+            });
+          
+        
+</script>
 </head>
-<body>
-    <div class="card">
-
-        <div class="top_card">
-            <h1>Log in </h1>
-        </div>
-        <div class="below_card">
-            <h3>Give Your information*</h3>
-            <h3>Number of Courses</h3>
-            <input type="integer" name="number">
-            <form action="/add" method="post"  enctype="multipart/form-data">
-                
-
-            </form>
-        </div>
+<div class="card">
+<div class="below_card">
+<form action="{%url 'get_courses'%}" method="post">	
+  {% csrf_token %}	
+<div class="field_wrapper">
+			
+    <div>
+      <input type="text" name="course_name1" value="course_name" />
+      <a href="javascript:void(0);" class="add_button" title="Add field">Add courses</a><br>
+      <input type="text" name="course_code1" value="course_code" /><br>
+      <input type="text" name="course_credit1" value="course_credit" /><br><br>
     </div>
+    
+  </div>
+         
+  <input type="hidden" id="output" name="output"/>
+  <input type="hidden" name="semester_no" value={{semester_no}}/>
+  <input type="hidden" name="regi_no" value={{regi_no}}/>
+  <button style=" background-color: rgb(172, 5, 102);
+                    border:none; height: 30px; color:aliceblue; ">Submit</button>
+</form>
+</div>
+</div>
 </body>
 </html>

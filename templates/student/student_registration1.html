@@ -11,36 +11,9 @@
         <link rel="stylesheet" href="{% static 'style.css' %}" />
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-        <script>
-          
-            $(function () {
-              $("#datetimepicker1").datetimepicker({
-                format: 'DD/MM/YYYY HH:mm',
-              });
-            });
-         
-         var form = document.getElementById("myForm");
-
-    form.addEventListener("submit", function(event) {
-    event.preventDefault();
-
-    var data = new FormData(form);
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/pdf", true);
-    xhr.setRequestHeader("Accept", "application/pdf");
-    xhr.responseType = "blob";
-    xhr.onload = function() {
-      if (this.status === 200) {
-        var blob = new Blob([this.response], { type: "application/pdf" });
-        var link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = "form-data.pdf";
-        link.click();
-      }
-    };
-    xhr.send(data);
-  });
-        </script>
+      
+       
+        
     </head>
     <body>
         <div class="card">
@@ -49,18 +22,31 @@
                 <h1>Registration For Your Required Semester Final</h1>
             </div>
             <div class="below_card">
+                {% if msg %}
+                <p style="color:rgb(241, 14, 14); background-color: rgb(224, 129, 129);height:30px;padding-top:10px; text-align:center;">{{msg}}</p>
+                
+                {% endif %}
+
                 <h3>Give Your information*</h3>
                 <form role="form" action="{% url 'regicomplete' %}" method="post" enctype="multipart/form-data">
 
                   {% csrf_token %}
- 
-
-                   {% for field in form %}
-                  {{ field.errors }}
-                  {{ field.label_tag }}<br>
-                  {{ field }}<br>
-                {% endfor %}
-          
+                  <label>Department name:</label><br>
+                  <input class="iut" type="text" name="dept_name" maxlength="150"><br><br>
+                  <label>Hall name:</label><br>
+                  <input class="iut" type="text" name="hall_name" maxlength="150"><br><br>
+                  <label>Registration No. :</label><br>
+                  <input type="text" name="regi_no" maxlength="16"><br><br>
+                  <label>Phone NUmber:</label><br>
+                  <input type="text" name="phn_nmbr" maxlength="30"><br><br>
+                  <label>Semester no:</label><br>
+                  <input type="number" id="quantity" name="semester_no" min="1" max="10"><br><br> 
+                  <label>bank receipt no.:</label><br>
+                  <input type="text" name="bank_receipt" maxlength="30"><br><br>
+    
+                  <label>Bank receipt image:</label><br>
+                  <input type="file" name="bank_receipt_image"><br><br> 
+                 
 
                     <br>
                     <button style=" background-color: rgb(172, 5, 102); border:none; height: 30px;  color:aliceblue; width: 70px;">Submit</button>
@@ -69,3 +55,4 @@
         </div>
     </body>
 </html>
+

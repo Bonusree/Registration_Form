@@ -17,7 +17,13 @@
     font-family: 'Abril Fatface', serif;
     color: aliceblue;
 }
+.button_card {
+    padding: 10px 40px;
 
+    background-color: rgb(111, 3, 68);
+    font-family: 'Abril Fatface', serif;
+    color: aliceblue;
+}
 .below_card {
     padding: 40px;
 

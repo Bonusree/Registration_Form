@@ -1,8 +1,6 @@
 from django import forms
-from .models import *
-class sman(forms.Form):
-    Email=forms.EmailField(label='email', max_length=250)
-    Password=forms.CharField(label='Password', widget=forms.PasswordInput, max_length=250)
+
+from django.core.exceptions import ValidationError
     
 class ExampleForm(forms.Form):
     name=forms.CharField(label='Student Name',max_length=250 )
@@ -27,7 +25,7 @@ class registraion(forms.Form):
     semester_no=forms.IntegerField(label="Semester no",widget=forms.TextInput(attrs={"class":"form-control"}) )
     bank_receipt=forms.IntegerField(label="bank_receipt",widget=forms.TextInput(attrs={"class":"form-control"}) )
     courses=forms.IntegerField(label="Number of courses",widget=forms.TextInput(attrs={"class":"form-control"}) )
-    bank_receipt_image=forms.FileField(label="Bank receipt photo",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}))
+    bank_receipt_image=forms.FileField(label="Profile Pic",max_length=50,widget=forms.FileInput(attrs={"class":"form-control"}))
     
 
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+        <link rel="stylesheet" href="/resources/demos/style.css">
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+        <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <style>
+            .f
+        {
+            margin-top: 110px;
+            margin-left: 300px;
+        }
+        button
+        {
+          background-color:  rgb(128, 5, 62);
+            color: white;
+            padding: 35px 300px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border: solid 3px rgb(156, 39, 93);
+            border-radius: 5px;
+            margin:20px;
+        }
+        a:link, a:visited {
+            background-color:  rgb(128, 5, 62);
+            color: white;
+            padding: 35px 300px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border: solid 3px rgb(156, 39, 93);
+            border-radius: 5px;
+            margin:20px;
+          }
+          
+          a:hover, a:active {
+            background-color: rgb(3, 102, 94);
+            border:none;
+          }
+          button:hover, button:active {
+            background-color: rgb(3, 102, 94);
+            border:none;
+          }
+        </style>
+</head>
+<body>
+    
+        <div style="color: rgb(6, 138, 19); background-color:aliceblue">
+          {% if msg %}
+          <p>{{msg}}</p>
+          {% endif %}
+        </div>
+        <div class="top_card">
+            <h1>Welcome id:{{regi_no}}</h1>
+        </div>
+        <div class="f">
+        <form action="{% url 'generate_pdf' %}" method="post">
+            {% csrf_token %}
+          <input type="hidden" name="regi_no" value="{{regi_no}}"/>
+          <button ><b>Download Admit</b></button>
+        </form>
+        
+        <a href="student_home"><b>Register Here</b></a>
+        
+        
+</div>
+        
+    
+</body>
+</html>

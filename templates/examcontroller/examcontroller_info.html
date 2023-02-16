@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet"
+      href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <style>
+            table, th, td {
+                border: 1px solid;
+              }
+              .card {
+                margin-left: 400px;
+                margin-right: auto;
+                margin-top: 100px;
+                justify-content: center;
+                display: block;
+                width: 38%;
+            
+            }
+          
+        </style>
+  </head>
+  <body>
+    <div class="card">
+    <table >
+      <tr>
+        <td>Name</td>
+        <td>{{all_data.name}}</td>
+      </tr>
+      <tr>
+        <td>Department Name</td>
+        <td>{{all_data.dept_name}}</td>
+      </tr>
+      <tr>
+        <td>Hall Name</td>
+        <td>{{all_data.hall_name}}</td>
+      </tr>
+      <tr>
+        <td>Session</td>
+        <td>{{all_data.session}}</td>
+      </tr>
+      <tr>
+        <td>Semester No</td>
+        <td>{{all_data.semester_no}}</td>
+      </tr>
+      <tr>
+        <td>Phone Number</td>
+        <td>{{all_data.phn}}</td>
+      </tr>
+      <tr>
+        <td>Bank receipt</td>
+        <td>{{all_data.bank_receipt}}</td>
+      </tr>
+      
+      <tr>
+        <td>Bank receipt Photo</td>
+        <td><img src="{{ all_data.bank_image.url }}" alt="photo">
+        </td>
+      </tr>
+      <tr>
+        <td>Course Name</td>
+        <td>{{ all_data.course_name}}
+        </td>
+      </tr>
+      <tr>
+        <td>Course Name</td>
+        <td>{{ all_data.course_code}}
+        </td>
+      </tr>
+      <tr>
+        <td>Course Name</td>
+        <td>{{ all_data.course_credit}}
+        </td>
+      </tr>
+      
+    </table>
+    <form method="post" action="{% url 'examcontroller_emnei' %}">
+      {% csrf_token %}
+      <br>
+      <input type="hidden" name="dept_name" value="{{all_data.dept_name}}"/>
+      <input type="hidden" name="regi_no" value="{{all_data.regi_no}}"/>
+      <input type="hidden" name="semester_no" value="{{all_data.semester_no}}"/>
+      <button name="ac" value="ac" style=" background-color:green;
+                    border:none; height: 40px; color:aliceblue; ">Accepeted</button>
+                  
+      <button name="wa" value="wa" style=" background-color: red; 
+                    border:none; height: 40px; color:aliceblue; ">Rejected</button>
+    </form>
+  </div>
+  
+  </body>
+  
+</html>

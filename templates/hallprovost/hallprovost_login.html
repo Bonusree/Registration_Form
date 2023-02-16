@@ -1,33 +1,46 @@
 <!DOCTYPE html>
-{%load static%}
+{% load static %}
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'style.css' %}" />
-    <title>form</title>
-</head>
-<body>
-    <div class="card">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-        <div class="top_card">
-            <h1>Log in </h1>
-        </div>
-        <div class="below_card">
-            <h3>Give Your information*</h3>
-            <form action="{% url 'login' %}" class="formbody" method="post">
-                <label for="email">E-mail:</label><br><br>
-                <input type="email" id="fname" maxlength="400" size="40"
-                    placeholder="" name="name" required><br><br><br>
+<!-- Optional theme -->
+ <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+        <title>Document</title>
+
+    </head>
+    <body>
+
+        <div class="card">
+
+            <div class="top_card">
+                <h1>Log in </h1>
+            </div>
+            <div class="below_card">
+                {% if msg %}
+                <p style="color:rgb(241, 14, 14); background-color: rgb(224, 129, 129);height:30px;padding-top:10px; text-align:center;">{{msg}}</p>
+                
+                {% endif %}
+                <h3>Give Your information*</h3>
+                <form action="{% url 'hallprovost_login' %}" method="post">
+                    {% csrf_token %}
+                    <label for="email">E-mail:</label><br><br>
+                    <input type="email" id="fname" maxlength="400" size="40"
+                    placeholder="" name="email" required><br><br><br>
                 <label for="password">Password:</label><br><br>
                 <input type="password" id="fname" maxlength="60" size="40"
-                    placeholder="" name="name" required><br><br><br>
+                    placeholder="" name="password" required><br><br><br>
                 <button style=" background-color: rgb(172, 5, 102);
                     border:none; height: 30px; color:aliceblue; ">NEXT</button>
-            </form>
-           
+                </form>
+            </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>
