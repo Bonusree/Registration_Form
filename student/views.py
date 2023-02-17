@@ -14,9 +14,10 @@ from django.db import connections
 from django.template import loader
 import pdfkit
 import os
-from django.conf import settings
-# base_dir_name = os.path.basename(os.getcwd())
+from django.conf import settings 
+from ..Registration_Form import settings
 
+# base_dir_name = os.path.basename(os.getcwd())
 
 # Create your views here 
 exists=''
@@ -115,7 +116,20 @@ def get_courses(request):
         msg="your registration has completed"
         return render(request, 'student/student_home.html', {'msg':msg})
             
-
+def get_admit(request):
+    if request.method == 'POST':
+        regi_no=request.POST.get("regi_no")
+        ex=permission_model.objects.filter(regi_no=regi_no, 
+                                           chairman_permission=True, 
+                                           examcontroller_permission=True,
+                                           hallprovost_permission=True).exists()
+        if ex:
+            val=registration1.objects.filter(regi_no=regi_no)
+            context={'data':val}
+            return render(request,  "student/get_admit.html", context)
+        else:
+            return HttpResponse()
+            
 import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.http import FileResponse
@@ -129,44 +143,179 @@ from django.http import HttpResponse
 def generate_pdf(request):
     if request.method == 'POST':
         regi_no=request.POST.get("regi_no")
-        st=regi_no+'\n'+regi_no
-        buffer= io.BytesIO()
-        p= canvas.Canvas(buffer)
+        semester_no=request.POST.get("semester_no")
+        data=registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).last()
+        data2=student.objects.filter(regi_no=regi_no).last()        
+        dic={'name':data2.name,'session':data2.session_start_year,
+         'dept_name':data.dept_name, 'hall_name':data.hall_name, 'semester_no':data.semester_no, 
+         'regi_no':data.regi_no}
+        print("hello")
+        createAdmit(dic)
         
-        p.drawString(200, 700, "registration no: "+st)
-        p.showPage()
-        p.save()
-        buffer.seek(0)
-        return FileResponse(buffer,  content_type='application/pdf')
-    # # Get the user input
-    
-    #     text=str(request.GET.get('text'))
-    #     chobi=str(request.GET.get('chobi'))
-    #     # user=registration1(text=text, chobi=chobi)
-    #     # user.save()
-    #     # text=str(user)
-        
-    # # Create a file-like buffer to receive PDF data.
-    #     buffer = io.BytesIO()
-
-    # # Create the PDF object, using the buffer as its "file."
-    #     p = canvas.Canvas(buffer)
-
-    # # Draw things on the PDF. Here's where the PDF generation happens.
-    #     p.drawS(200, 700, "User Input: " + text
-    #                  +chobi)
+        pdf = os.path.join(settings.BASE_DIR,'try.pdf')
+        with open(pdf, 'rb') as pdf_file:
+            response = FileResponse(pdf_file, content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{pdf}"'
+            return response
        
-    # # Close the PDF object cleanly, and we're done.
-    #     p.showPage()
-    #     p.save()
+        # buffer= io.BytesIO()
+        # p= canvas.Canvas(buffer)
+    
+        # p.drawString(200, 700, "registration no: "+st+v)
+        # p.showPage()
+        # p.save()
+        # buffer.seek(0)
+        # return FileResponse(buffer,  content_type='application/pdf')
+    return HttpResponse("kisu nai")
+    
+options = {
+    'page-size': 'A4',
+    'margin-top': '5mm',
+    'margin-right': '0mm',
+    'margin-bottom': '0mm',
+    'margin-left': '0mm',
+    'orientation': 'Landscape',
+    'encoding': "UTF-8"
+}
+def createAdmit(dic):
+    html = f"""
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+        .container{{
+            width: 936px;
+            height: 445px;
+            border: 1px solid black;
+            margin: 0 auto;
+            padding-top: 5px;
+            padding-bottom: 10px;
+        }}
+        .container ul{{
+            list-style-type: none;
+        }}
+        .header{{
+            background-color: #eeeedd;
+            padding: 10px 0px;
+            display: flex;
+        }}
+        .header table{{
+            width: 50%;
+            margin: 0 auto;
+        }}
+        .header table td{{
+            padding: 0px;
+        }}
+        .information table{{
+            padding: 10px 0px;
+            font-size: 20px;
+            display: flex;
+            width: 95%;
+            /* border: 1px solid; */
+            margin: auto;
+        }}
+        .information table tr,td{{
+            padding-top: 10px;
+        }}
+        .info-box{{
+            margin: 0px 5px;
+            border-bottom: 1px dotted;
+            width: 450px;
+        }}
+        img{{
+            height: 80px;
+            width: 80px;
+        }}
+        .sign{{
+            margin-top: 30px;
+        }}
+        .sign table{{
+            width: 90%;
+            margin: 0px auto;
+        }}
+        .sign table td{{
+            padding: 0px;
+        }}
+        .footer{{
+            background-color: #eeeedd;
+            padding: 10px 0px;
+            text-align: center;
+        }}
+    </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <table>
+                    <tr>
+                        <td rowspan="3"><img src="https://upload.wikimedia.org/wikipedia/commons/archive/8/8e/20130209134529%21COU_LOGO.jpg"/></td>
+                        <td style="font-size: 40px; text-align: center; font-weight: bold;">Comilla University</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 20px; text-align: center; ">Cumilla-3506</td>
+                    </tr>
+                    <tr>
+                        <td style="background-color: black; color:white; font-size: 35px; text-align: center; font-weight: bold;">ADMIT CARD</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="font-size: 20px; font-weight: bold; text-align: right;">
+                            {dic['semester_no']} Semester Final Examination 2022
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div class="information">
+                <table>
+                    <tr>
+                        <td>Name of the Students: </td>
+                        <td colspan="3"><div class="info-box">{dic['name']}</div></td>
+                    </tr>
+                    <tr>
+                        <td>Hall Name: </td>
+                        <td colspan="3"><div class="info-box">{dic['hall_name']}</div></td>
+                    </tr>
+                    <tr>
+                        <td>Department: </td>
+                        <td colspan="2"><div class="info-box" style="width: 300px;">{dic['dept_name']}</div></td>
+                        <td>Registration No: </td>
+                        <td><div class="info-box" style="width: 150px;">{dic['regi_no']}</div></td>
+                    </tr>
+                    <tr>
+                        <td>Session: </td>
+                        <td ><div class="info-box" style="width: 150px;">{dic['session']}</div></td>
+                        <td>Examination Roll No: </td>
+                        <td colspan="2"><div class="info-box" style="width: 200px;">{dic['regi_no']}</div></td>
+                    </tr>
+                </table>
+            </div>
+            <div class="sign">
+                <table>
+                    <tr>
+                        <td>----------------------------------</td>
+                        <td style="text-align: right;">----------------------------------</td>
+                    </tr>
+                    <tr>
+                        <td>Signature of Student</td>
+                        <td style="text-align: right;">Controller of Examination's</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="footer">
+                it is footer line
+            </div>  
+        </div>
+    </body>
+</html>
+    """
+    with open("generated.html", "w") as file:
+            file.write(html)
+    config = pdfkit.configuration(wkhtmltopdf=r'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')        
+    pdfkit.from_file('generated.html', 'try.pdf',configuration=config,options=options)
+    # os.startfile('try.pdf')
 
-    # # FileResponse sets the Content-Disposition header so that browsers
-    # # present the option to save the file.
-    #     buffer.seek(0)
-    #     file = InMemoryUploadedFile(buffer, None, 'user_input.pdf', 'application/pdf', buffer.getbuffer().nbytes, None)
-
-    # # Store the PDF file in the database
-    #     pdf =store_pdf( pdf_file=file )
-    #     pdf.save()
-
-       # return HttpResponse(regi_no)
+# createAdmit()

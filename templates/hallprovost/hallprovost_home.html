@@ -18,27 +18,27 @@
             margin-left: 300px;
         }
         .c {
-            margin-left: 300px;
-            margin-right:auto;
-            margin-top: 100px;
-            background-color: rgb(178, 230, 225);
-            padding: 40px ;
-            
-            box-shadow: 5px 5px rgb(168, 212, 208);
-            width: 60%;
+          margin-left: 350px;
+          margin-right:auto;
+          margin-top: 100px;
+          background-color: rgb(178, 230, 225);
+          padding: 40px ;
+          
+          box-shadow: 5px 5px rgb(168, 212, 208);
+          width: 45%;
         
         }
         button, button:visited {
-            background-color:  rgb(3, 102, 94);
-            color: white;
-            padding: 35px 300px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border: solid 3px rgb(96, 222, 211);
-            border-radius: 5px;
-            margin:20px;
-          }
+          background-color:  rgb(3, 102, 94);
+          color: white;
+          padding: 0px 150px;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+          border: solid 3px rgb(96, 222, 211);
+          border-radius: 5px;
+          margin:20px;
+        }
           
           button:hover, button:active {
             background-color: rgb(22, 222, 205);
@@ -50,7 +50,7 @@
     <div class="c">
     
           {% for item in data %}
-          <form action="{%url 'chairman_get_info'%}" method="POST">
+          <form action="{%url 'hallprovost_get_info'%}" method="POST">
             {% csrf_token %}
           <input type="hidden" name="regi_no" value="{{item.regi_no}}"/>
           <input type="hidden" name="semester_no" value="{{item.semester_no}}"/>

@@ -21,7 +21,7 @@
         {
           background-color:  rgb(128, 5, 62);
             color: white;
-            padding: 35px 300px;
+            padding: 15px 300px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -32,7 +32,7 @@
         a:link, a:visited {
             background-color:  rgb(128, 5, 62);
             color: white;
-            padding: 35px 300px;
+            padding: 10px 300px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -61,14 +61,19 @@
         <div class="top_card">
             <h1>Welcome id:{{regi_no}}</h1>
         </div>
+        <div style="color: rgb(6, 138, 19); background-color:aliceblue height=20px">
+          {% if msg %}
+          <p>{{msg}}</p>
+          {% endif %}
+        </div>
         <div class="f">
-        <form action="{% url 'generate_pdf' %}" method="post">
+        <form action="{% url 'get_admit' %}" method="post">
             {% csrf_token %}
           <input type="hidden" name="regi_no" value="{{regi_no}}"/>
-          <button ><b>Download Admit</b></button>
+          <button ><h2>Download Admit</h2></button>
         </form>
         
-        <a href="student_home"><b>Register Here</b></a>
+        <a href="student_home"><h2>Register Here</h2></a>
         
         
 </div>
@@ -76,3 +81,4 @@
     
 </body>
 </html>
+

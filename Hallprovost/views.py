@@ -69,8 +69,9 @@ def hallprovost_emnei(request):
             ex.hallprovost_permission=False
         ex.save()
         vs=request.POST.get("hall_name")
-        data=permission_model.objects.filter(hall_name=vs,hallprovost_permission=False)
-        context={'data':data, }
+        data=permission_model.objects.filter(hall_name=vs,hallprovost_permission=0).last()
+        context={'data':data }
+        #return HttpResponse(context)
         return render(request,  "hallprovost/hallprovost_home.html", context)
         
     else:
