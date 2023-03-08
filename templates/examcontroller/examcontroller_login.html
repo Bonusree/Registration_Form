@@ -23,12 +23,12 @@
             <div class="top_card">
                 <h1>Log in Examcontroller</h1>
             </div>
-            <div class="below_card">
+            <div class="below_card" style="text-align:center;">
                 {% if msg %}
                 <p style="color:rgb(241, 14, 14); background-color: rgb(224, 129, 129);height:30px;padding:5px; text-align:center;">{{msg}}</p>
                 
                 {% endif %}
-                <h3>Give Your information*</h3>
+                <h3 style="text-align:center">Give Your Credential </h3><br>
                 <form action="{% url 'examcontroller_login' %}" method="post">
                     {% csrf_token %}
                     <label for="email">E-mail:</label><br><br>
@@ -38,8 +38,9 @@
                 <input type="password" id="fname" maxlength="60" size="40"
                     placeholder="" name="password" required><br><br><br>
                 <button style=" background-color: rgb(172, 5, 102);
-                    border:none; height: 30px; color:aliceblue; ">NEXT</button>
+                    border:none; height: 30px; color:aliceblue; ">Log in</button>
                 </form>
+            
             </div>
         </div>
     </body>

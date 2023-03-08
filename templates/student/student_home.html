@@ -21,7 +21,7 @@
         {
           background-color:  rgb(128, 5, 62);
             color: white;
-            padding: 15px 300px;
+            padding: 11px 145px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
@@ -53,24 +53,26 @@
 </head>
 <body>
     
-        <div style="color: rgb(6, 138, 19); background-color:aliceblue">
-          {% if msg %}
-          <p>{{msg}}</p>
-          {% endif %}
-        </div>
+        
         <div class="top_card">
             <h1>Welcome id:{{regi_no}}</h1>
         </div>
-        <div style="color: rgb(6, 138, 19); background-color:aliceblue height=20px">
-          {% if msg %}
-          <p>{{msg}}</p>
-          {% endif %}
-        </div>
+        
         <div class="f">
-        <form action="{% url 'get_admit' %}" method="post">
+          
+            {% if msg %}
+            <div style="color: rgb(6, 138, 19); background-color:aliceblue; height:30px; width: 75%;text-align:center">
+            <p>{{msg}}</p>
+            </div>
+            {% endif %}
+          
+        <form action="{% url 'get_admit_card' %}"  method="post">
             {% csrf_token %}
           <input type="hidden" name="regi_no" value="{{regi_no}}"/>
-          <button ><h2>Download Admit</h2></button>
+          <button><label for="text">Semester No:</label>
+                <input type="text" id="" maxlength="60" size="40"
+                    placeholder="" name="semester_no" required>
+          <h2>Download Admit</h2></button>
         </form>
         
         <a href="student_home"><h2>Register Here</h2></a>

@@ -21,15 +21,16 @@ def chairman_login(request):
             
             if exists:
                 data=permission_model.objects.filter(dept_name=vs, chairman_permission=False)
-               
+                data1=permission_model.objects.filter(dept_name=vs, chairman_permission=False).exists()
+                if data1==False:
+                    msg="No student has complete his/sre registration"
+                    return render(request,  "chairman/chairman_home.html", {'msg':msg})
                 context={'data':data, }
                 print(data)
                 return render(request,  "chairman/chairman_home.html", context)
-            else:
-                return HttpResponse(get_email)
-            
         except Exception as e:
-            return HttpResponse(e)
+            msg="Email and Password are not correct"
+            return render(request,  "chairman/chairman_login.html", {'msg':msg})
 from django.http import JsonResponse     
 def chairman_get_info(request):
     if request.method=="POST":
@@ -41,7 +42,8 @@ def chairman_get_info(request):
         
         data=registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).last()
         data1=course_model.objects.filter(regi_no=regi_no).last()
-        data2=student.objects.filter(regi_no=regi_no).last()        
+        data2=student.objects.filter(regi_no=regi_no).last()  
+        
         dic={'name':data2.name,'session':data2.session_start_year,
          'dept_name':data.dept_name, 'hall_name':data.hall_name, 'semester_no':data.semester_no, 
          'bank_receipt':data.bank_receipt,'regi_no':data.regi_no,

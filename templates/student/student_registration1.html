@@ -21,14 +21,13 @@
             <div class="top_card">
                 <h1>Registration For Your Required Semester Final</h1>
             </div>
-            <div class="below_card">
+            <div class="below_card" style="text-align:center">
                 {% if msg %}
                 <p style="color:rgb(241, 14, 14); background-color: rgb(224, 129, 129);height:30px;padding-top:10px; text-align:center;">{{msg}}</p>
                 
                 {% endif %}
 
-                <h3>Give Your information*</h3>
-                <form role="form" action="{% url 'regicomplete' %}" method="post" enctype="multipart/form-data">
+                <h3 style="text-align:center">Give Your information*</h3>                <form role="form" action="{% url 'regicomplete' %}" method="post" enctype="multipart/form-data">
 
                   {% csrf_token %}
                   <label>Department name:</label><br>

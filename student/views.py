@@ -15,7 +15,8 @@ from django.template import loader
 import pdfkit
 import os
 from django.conf import settings 
-from ..Registration_Form import settings
+from django.db.models import F
+from django.shortcuts import get_object_or_404  
 
 # base_dir_name = os.path.basename(os.getcwd())
 
@@ -37,10 +38,12 @@ def student_login(request):
             if exists:
                 return render(request,  "student/student_home.html", {'regi_no':val.last().regi_no})
             else:
-                return HttpResponse(v)
+                msg="Email and Password are not correct"
+                return render(request,  "student/student_login.html", {'msg':msg})
             
         except Exception as e:
-            return HttpResponse(e)
+            msg="Email and Password are not correct"
+            return render(request,  "student/student_login.html", {'msg':msg})
         
 def student_home(request):
     return render(request,'student/student_registration1.html')           
@@ -71,29 +74,27 @@ def regi_complete(request):
                     msg="you have already registered"
                     return render(request, 'student/student_registration1.html', {'msg':msg})
                 try:
+                    
                     regi_form=registration1(dept_name=dept_name, regi_no=regi_no,hall_name=hall_name,
                                             phn_nmbr=phn_nmbr, bank_receipt=bank_receipt,
                                             semester_no=semester_no, 
                                             bank_receipt_image=bank_receipt_image_url)
                     regi_form.save()
-                    per=permission_model(regi_no=regi_no, semester_no=semester_no, 
-                                         hall_name=hall_name, dept_name=dept_name,
-                        chairman_permission=False , examcontroller_permission=False,
-                        hallprovost_permission=False)
-                    per.save()
                 except Exception as e:
                     return HttpResponse(e)
             except Exception as e:
                 return HttpResponse(e)
         
             dic={'semester_no':semester_no,  'regi_no':regi_no}
-            return render(request, 'student/courses.html', {'semester_no':semester_no,  'regi_no':regi_no})
+            return render(request, 'student/courses.html', {'semester_no':semester_no,  'regi_no':regi_no, 'dept_name':dept_name, 'hall_name':hall_name})
        
 def get_courses(request):
     if request.method!='POST':
         return render(request, 'student/courses.html')
     else:
         courses=int(request.POST.get("output"))
+        hall_name=request.POST.get("hall_name")
+        dept_name=request.POST.get("dept_name")
         semester_no=int(request.POST.get("semester_no")[0:-1])
         regi_no=request.POST.get("regi_no")[0:-1]
         c_n=''
@@ -112,23 +113,37 @@ def get_courses(request):
                            course_name=c_n, course_code=c_c,
                            course_credit=c_t)
         c.save()
-        
+        per=permission_model(regi_no=regi_no, semester_no=semester_no, 
+                                         hall_name=hall_name, dept_name=dept_name,
+                        chairman_permission=False , examcontroller_permission=False,
+                        hallprovost_permission=False)
+        per.save()
         msg="your registration has completed"
-        return render(request, 'student/student_home.html', {'msg':msg})
-            
-def get_admit(request):
+        return render(request, 'student/student_home.html', {'msg':msg, 'regi_no':regi_no})
+permission=""
+def get_admit_card(request):
     if request.method == 'POST':
         regi_no=request.POST.get("regi_no")
-        ex=permission_model.objects.filter(regi_no=regi_no, 
-                                           chairman_permission=True, 
-                                           examcontroller_permission=True,
-                                           hallprovost_permission=True).exists()
-        if ex:
-            val=registration1.objects.filter(regi_no=regi_no)
-            context={'data':val}
-            return render(request,  "student/get_admit.html", context)
+        semester_no=request.POST.get("semester_no")
+        try:
+            permission = permission_model.objects.filter(regi_no=regi_no, chairman_permission=True, hallprovost_permission=True,semester_no=semester_no).first()
+            print(permission)
+            print("hellloo")
+        except permission_model.DoesNotExist:
+            return HttpResponse("anything")
+        except Exception as e:
+            return HttpResponse("An error occurred: " + str(e))
+        if permission:
+            ex = registration1.objects.filter(permission=permission)
+            
+            return render(request,  "student/get_admit.html", context={'data':ex})
         else:
-            return HttpResponse()
+            msg="Your admit card has not ready yet"
+            return render(request,  "student/student_home.html",{'msg':msg} )
+       
+    else:
+          msg="Your Admit card Not Yet Prepared"
+          return  render(request,  "student/get_admit.html", {'msg':msg})
             
 import io
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -151,21 +166,14 @@ def generate_pdf(request):
          'regi_no':data.regi_no}
         print("hello")
         createAdmit(dic)
-        
-        pdf = os.path.join(settings.BASE_DIR,'try.pdf')
-        with open(pdf, 'rb') as pdf_file:
-            response = FileResponse(pdf_file, content_type='application/pdf')
-            response['Content-Disposition'] = f'attachment; filename="{pdf}"'
+        #return HttpResponse("kisu nai")
+        filename = 'try.pdf'
+        filepath = filename
+        with open(filepath, 'rb') as pdf:
+            response = HttpResponse(pdf.read(), content_type='application/pdf')
+            response['Content-Disposition'] = f'attachment; filename="{filename}"'
             return response
        
-        # buffer= io.BytesIO()
-        # p= canvas.Canvas(buffer)
-    
-        # p.drawString(200, 700, "registration no: "+st+v)
-        # p.showPage()
-        # p.save()
-        # buffer.seek(0)
-        # return FileResponse(buffer,  content_type='application/pdf')
     return HttpResponse("kisu nai")
     
 options = {
@@ -305,9 +313,7 @@ def createAdmit(dic):
                     </tr>
                 </table>
             </div>
-            <div class="footer">
-                it is footer line
-            </div>  
+              
         </div>
     </body>
 </html>

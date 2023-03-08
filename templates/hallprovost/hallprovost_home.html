@@ -48,7 +48,11 @@
 </head>
 <body>
     <div class="c">
-    
+      {% if msg %}
+      <div style="color: rgb(49, 5, 108); text-align:center">
+      <p>{{msg}}</p>
+      </div>
+      {% endif %}
           {% for item in data %}
           <form action="{%url 'hallprovost_get_info'%}" method="POST">
             {% csrf_token %}

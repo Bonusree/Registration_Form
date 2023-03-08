@@ -26,7 +26,8 @@ def hallprovost_login(request):
                 print(data)
                 return render(request,  "hallprovost/hallprovost_home.html", context)
             else:
-                return HttpResponse(get_email)
+                msg="You have entered wrong Password or email"
+                return render(request,"hallprovost/hallprovost_login.html", {'msg':msg})
             
         except Exception as e:
             return HttpResponse(e)
