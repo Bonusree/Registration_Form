@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-
+{% load static %}
 <html lang="en">
 <head>
         <meta charset="UTF-8">
@@ -8,49 +8,93 @@
         <title>Document</title>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
         <link rel="stylesheet" href="/resources/demos/style.css">
-
+        <link rel="stylesheet" href="{% static 'style.css' %}" />
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
-            .f
+          .f
+          {
+              margin-top: 110px;
+              margin-left: 300px;
+          }
+          .t_c{
+            padding: 10px 20px;
+            overflow: auto;
+            color: aliceblue;
+            background-color: rgb(3, 102, 94);
+            border: solid 3px rgb(15, 165, 152);;
+        }
+       .t_c img{
+        float: left;
+        height: 70px;
+        width: auto;
+       }
+        .bt{
+          float: right;
+          font-size: 20px;
+          text-align: center;
+          color:rgb(3, 102, 94); 
+          border-radius: 20px;
+          background-color: aliceblue;
+          margin: 7px;
+          text-decoration: none;
+          padding: 10px 15px;
+        }
+        .content
         {
-            margin-top: 110px;
-            margin-left: 300px;
+          float: left;
+         padding-left: 10px;
         }
-        .c {
-            margin-left: 300px;
-            margin-right:auto;
-            margin-top: 100px;
-            background-color: rgb(178, 230, 225);
-            padding: 40px ;
-            
-            box-shadow: 5px 5px rgb(168, 212, 208);
-            width: 60%;
-        
-        }
-        button, button:visited {
-            background-color:  rgb(3, 102, 94);
-            color: white;
-            padding: 35px 300px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border: solid 3px rgb(96, 222, 211);
-            border-radius: 5px;
-            margin:20px;
-          }
+          .c {
+              margin-left: 300px;
+              margin-right:auto;
+              margin-top: 100px;
+              background-color: rgb(208, 234, 232);
+              padding: 40px ;
+              
+              box-shadow: 5px 5px rgb(168, 212, 208);
+              width: 60%;
           
-          button:hover, button:active {
-            background-color: rgb(22, 222, 205);
-            border:none;
           }
-        </style>
+          .bn, .bn:visited {
+              background-color:  rgb(3, 102, 94);
+              color: white;
+              padding: 35px 300px;
+              text-align: center;
+              text-decoration: none;
+              display: inline-block;
+              border: solid 3px rgb(96, 222, 211);
+              border-radius: 5px;
+              margin:20px;
+            }
+            
+            .bn:hover, .bn:active {
+              background-color: rgb(22, 222, 205);
+              border:none;
+            }
+          </style>
 </head>
 <body>
+  <div class="t_c">
+    <form action="{% url 'home' %}"  method="post">
+      {% csrf_token %}
+      <button class="bt" ><i class="fa fa-fw fa-user"></i> log out</button>
+    </form>
+     
+      <img src="/static/images/comilla.jpg">
+      <div class="content">
+      <b style="font-size: 30px;">Comilla University</b><br>
+       <b style="font-size:20px">Computer Science and Engineering</b>
+    </div>
+    
+  </div>
+  
+</div>
     <div class="c">
       {% if msg %}
       <div style="color: rgb(49, 5, 108); text-align:center">
-      <p>{{msg}}</p>
+        <p style="font-size: 30px;">{{msg}}</p>
       </div>
       {% endif %}
           {% for item in data %}
@@ -58,7 +102,7 @@
             {% csrf_token %}
           <input type="hidden" name="regi_no" value="{{item.regi_no}}"/>
           <input type="hidden" name="semester_no" value="{{item.semester_no}}"/>
-          <button class="btnclick">ID:{{item.regi_no}}, semester no:{{item.semester_no}}</button>
+          <button class="bn" class="btnclick">ID:{{item.regi_no}}, semester no:{{item.semester_no}}</button>
         </form> 
           {% endfor %}
           

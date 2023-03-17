@@ -63,13 +63,13 @@ def regi_complete(request):
                 fs=FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'media')) 
                 filename=fs.save(bank_receipt_image.name,bank_receipt_image)
                 bank_receipt_image_url=fs.url(filename) 
-                print('agdagiyat',fs.url(filename))
+                print(hall_name, dept_name)
                 
                 s_e=student.objects.filter(regi_no=regi_no, dept_name=dept_name, hall_name=hall_name).exists()
                 if s_e==False:
                     msg="You have entered any Wrong Information"
                     return render(request, 'student/student_registration1.html', {'msg':msg})
-                exist=registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).exists()
+                exist=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).exists()
                 if exist==True:
                     msg="you have already registered"
                     return render(request, 'student/student_registration1.html', {'msg':msg})
@@ -81,12 +81,14 @@ def regi_complete(request):
                                             bank_receipt_image=bank_receipt_image_url)
                     regi_form.save()
                 except Exception as e:
-                    return HttpResponse(e)
+                    msg="you have missed any information to give"
+                    return render(request, 'student/student_registration1.html', {'msg':msg})
             except Exception as e:
-                return HttpResponse(e)
+                msg="you have missed any information to give"
+                return render(request, 'student/student_registration1.html', {'msg':msg})
         
-            dic={'semester_no':semester_no,  'regi_no':regi_no}
-            return render(request, 'student/courses.html', {'semester_no':semester_no,  'regi_no':regi_no, 'dept_name':dept_name, 'hall_name':hall_name})
+            dic={'semester_no':semester_no,  'regi_no':regi_no, 'dept_name':dept_name, 'hall_name':hall_name}
+            return render(request, 'student/courses.html', dic)
        
 def get_courses(request):
     if request.method!='POST':
@@ -95,6 +97,8 @@ def get_courses(request):
         courses=int(request.POST.get("output"))
         hall_name=request.POST.get("hall_name")
         dept_name=request.POST.get("dept_name")
+        print(hall_name, "hello")
+        print(dept_name, "ki hoilo")
         semester_no=int(request.POST.get("semester_no")[0:-1])
         regi_no=request.POST.get("regi_no")[0:-1]
         c_n=''
@@ -126,21 +130,47 @@ def get_admit_card(request):
         regi_no=request.POST.get("regi_no")
         semester_no=request.POST.get("semester_no")
         try:
-            permission = permission_model.objects.filter(regi_no=regi_no, chairman_permission=True, hallprovost_permission=True,semester_no=semester_no).first()
-            print(permission)
-            print("hellloo")
-        except permission_model.DoesNotExist:
-            return HttpResponse("anything")
-        except Exception as e:
-            return HttpResponse("An error occurred: " + str(e))
-        if permission:
-            ex = registration1.objects.filter(permission=permission)
-            
-            return render(request,  "student/get_admit.html", context={'data':ex})
-        else:
-            msg="Your admit card has not ready yet"
-            return render(request,  "student/student_home.html",{'msg':msg} )
+            ex=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).exists()
+            ex1=registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).exists()
+            if ex==False and ex1==False:
+                msg="You Have not registered yet"
+                return render(request,  "student/student_home.html",{'msg':msg} )
+            elif ex==False and ex1==True:
+                msg="You Have made any mistake . Do registration again "
+                return render(request,  "student/student_home.html",{'msg':msg} )
+            check=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no, hallprovost_permission=False).exists()
+            print(check)
+            if check==True:
+                msg="Hallprovost hasn't accept yet. Wait Please..."
+                return render(request,  "student/student_home.html",{'msg':msg} )
+            else:
+                check=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no, chairman_permission=True).exists()
+                if check==False:
+                    msg="Chairman hasn't accept yet. Wait Please..."
+                    return render(request,  "student/student_home.html",{'msg':msg} )
+                else:
+                    check=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no, examcontroller_permission=True).exists()
+                    if check==False:
+                        msg="examcontroller hasn't accept yet. Wait Please..."
+                        return render(request,  "student/student_home.html",{'msg':msg} )
+                    else:
+                        try:
+                            permission=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no,
+                            chairman_permission=True,examcontroller_permission= True, hallprovost_permission=True)
+                            ex=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no,
+                            chairman_permission=True,examcontroller_permission= True, hallprovost_permission=True).exists()
+                            if ex==False:
+                                msg="Your admit card has not prepared"
+                                return render(request,  "student/student_home.html",{'msg':msg} )
        
+                            return render(request,  "student/get_admit.html", context={'data':permission})
+                        except Exception as e:
+                            return HttpResponse(e)
+       
+                    
+            
+        except Exception as e:
+            return HttpResponse(e)
     else:
           msg="Your Admit card Not Yet Prepared"
           return  render(request,  "student/get_admit.html", {'msg':msg})
@@ -154,20 +184,30 @@ import pdfkit
 from django.http import HttpResponse
 # from django.views.generic import View
 # from django_wkhtmltopdf.views import PDFTemplateView
-
+from datetime import date
 def generate_pdf(request):
     if request.method == 'POST':
         regi_no=request.POST.get("regi_no")
         semester_no=request.POST.get("semester_no")
+        print(type(semester_no))
+        c_year=date.today()
+        if semester_no=="1":
+            s_no="1st"
+        elif semester_no=="2":
+            s_no="2nd"
+        elif semester_no=="3":
+            s_no="3rd"
+        else:
+            s_no= semester_no+"th"
         data=registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).last()
         data2=student.objects.filter(regi_no=regi_no).last()        
         dic={'name':data2.name,'session':data2.session_start_year,
-         'dept_name':data.dept_name, 'hall_name':data.hall_name, 'semester_no':data.semester_no, 
-         'regi_no':data.regi_no}
+         'dept_name':data.dept_name, 'hall_name':data.hall_name, 'semester_no':s_no, 
+         'regi_no':data.regi_no, 'c_year':c_year.year}
         print("hello")
         createAdmit(dic)
         #return HttpResponse("kisu nai")
-        filename = 'try.pdf'
+        filename = 'admit_card.pdf'
         filepath = filename
         with open(filepath, 'rb') as pdf:
             response = HttpResponse(pdf.read(), content_type='application/pdf')
@@ -254,8 +294,13 @@ def createAdmit(dic):
             text-align: center;
         }}
     </style>
+    
     </head>
     <body>
+    <script>
+        const d = new Date()
+        document.getElementById("demo").innerHTML = d.getFullYear();
+    </script>
         <div class="container">
             <div class="header">
                 <table>
@@ -271,7 +316,8 @@ def createAdmit(dic):
                     </tr>
                     <tr>
                         <td colspan="3" style="font-size: 20px; font-weight: bold; text-align: right;">
-                            {dic['semester_no']} Semester Final Examination 2022
+                        
+                            {dic['semester_no']} Semester Final Examination {dic['c_year']}
                         </td>
                     </tr>
                 </table>
@@ -305,7 +351,7 @@ def createAdmit(dic):
                 <table>
                     <tr>
                         <td>----------------------------------</td>
-                        <td style="text-align: right;">----------------------------------</td>
+                        <td style="text-align: right;">Singed</td>
                     </tr>
                     <tr>
                         <td>Signature of Student</td>
@@ -321,7 +367,7 @@ def createAdmit(dic):
     with open("generated.html", "w") as file:
             file.write(html)
     config = pdfkit.configuration(wkhtmltopdf=r'C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe')        
-    pdfkit.from_file('generated.html', 'try.pdf',configuration=config,options=options)
+    pdfkit.from_file('generated.html', 'admit_card.pdf',configuration=config,options=options)
     # os.startfile('try.pdf')
 
 # createAdmit()

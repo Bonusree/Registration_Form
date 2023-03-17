@@ -3,8 +3,6 @@
     margin-right: auto;
     margin-top: 100px;
     background-color: rgb(241, 235, 240);
-   
-    justify-content: left;
     display: block;
     width: 60%;
 
@@ -17,6 +15,7 @@
     font-family: 'Abril Fatface', serif;
     color: aliceblue;
 }
+
 .button_card {
     padding: 10px 40px;
     text-align: center;
@@ -25,11 +24,9 @@
     color: aliceblue;
 }
 .below_card {
-    padding: 10px 40px;
-    padding: 10px 40px;
+    padding: 40px 40px;
     font-family: Poppins, sans-serif;
     font-size: 16px;
-    text-align: center;
 }
 
 .logoimg {

@@ -4,7 +4,7 @@ class student(models.Model):
     regi_no=models.TextField(default=True)
     address=models.TextField(default=True)
     profile_pic=models.FileField(default=True)
-    session_start_year=models.DateField(blank=True, null=True)
+    session_start_year=models.CharField(default=True, max_length=150)
     dept_name=models.TextField(default=True)
     hall_name=models.TextField(default=True)
     name=models.CharField(default=True, max_length=150)

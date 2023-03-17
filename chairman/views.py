@@ -20,10 +20,10 @@ def chairman_login(request):
             vs=v.last().dept_name
             
             if exists:
-                data=permission_model.objects.filter(dept_name=vs, chairman_permission=False)
-                data1=permission_model.objects.filter(dept_name=vs, chairman_permission=False).exists()
+                data=permission_model.objects.filter(dept_name=vs, chairman_permission=False, hallprovost_permission=True)
+                data1=permission_model.objects.filter(dept_name=vs, chairman_permission=False, hallprovost_permission=True).exists()
                 if data1==False:
-                    msg="No student has complete his/sre registration"
+                    msg="No student has complete his/her registration"
                     return render(request,  "chairman/chairman_home.html", {'msg':msg})
                 context={'data':data, }
                 print(data)
@@ -55,7 +55,7 @@ def chairman_get_info(request):
     else:
         return HttpResponse("method not allowed")
 
-def chairman_emnei(request):
+def chairman_ac(request):
     if request.method=="POST":
         val=request.POST.get("ac")
         val1=request.POST.get("wa")
@@ -66,17 +66,28 @@ def chairman_emnei(request):
         
         print(ex, "hello")
         if val=="ac":
-          ex.chairman_permission=True
-        elif val1=="wa":
-            ex.chairman_permission=False
-        ex.save()
-        vs=request.POST.get("dept_name")
-        exists=permission_model.objects.filter(dept_name=vs, chairman_permission=0).exists()
-        if exists== True:
-             data=permission_model.objects.filter(dept_name=vs, chairman_permission=False)
-             context={'data':data, }
-             return render(request,  "chairman/chairman_home.html", context)
-        else:
-            return render(request,  "chairman/chairman_home.html")
-    else:
+            ex.chairman_permission=True
+            ex.save()
+            vs=request.POST.get("dept_name")
+            exists=permission_model.objects.filter(dept_name=vs, chairman_permission=False, hallprovost_permission=True).exists()
+            if exists== True:
+                data=permission_model.objects.filter(dept_name=vs, chairman_permission=False, hallprovost_permission=True)
+                context={'data':data, }
+                return render(request,  "chairman/chairman_home.html", context)
+            else:
+                msg="no student has registered"
+                return render(request,  "chairman/chairman_home.html", {'msg':msg})
+        if val1=="wa":
+            permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            course_model.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            vs=request.POST.get("dept_name")
+            exists=permission_model.objects.filter(dept_name=vs, chairman_permission=False, hallprovost_permission=True).exists()
+            if exists== True:
+                data=permission_model.objects.filter(dept_name=vs, chairman_permission=False, hallprovost_permission=True)
+                context={'data':data, }
+                return render(request,  "chairman/chairman_home.html", context)
+            else:
+                msg="no student has registered"
+                return render(request,  "chairman/chairman_home.html", {'msg':msg})
         return HttpResponse("val")

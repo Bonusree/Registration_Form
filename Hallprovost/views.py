@@ -20,8 +20,12 @@ def hallprovost_login(request):
             if exists:
                 v=hallprovost.objects.filter(email=get_email)
                 vs=v.last().hall_name
+                print(vs,"okkk")
                 data=permission_model.objects.filter(hall_name=vs,hallprovost_permission=False)
-               
+                data1=permission_model.objects.filter(hall_name=vs, hallprovost_permission=False).exists()
+                if data1==False:
+                    msg="No student has complete his/her registration"
+                    return render(request,  "hallprovost/hallprovost_home.html", {'msg':msg})
                 context={'data':data, }
                 print(data)
                 return render(request,  "hallprovost/hallprovost_home.html", context)
@@ -54,26 +58,38 @@ def hallprovost_get_info(request):
     else:
         return HttpResponse("method not allowed")
 
-def hallprovost_emnei(request):
+def hallprovost_ac(request):
     if request.method=="POST":
         val=request.POST.get("ac")
         val1=request.POST.get("wa")
         regi_no=request.POST.get("regi_no")
         semester_no=int(request.POST.get("semester_no"))
         print(val, val1, regi_no, semester_no)
-        ex=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).first()
-        
-        print(ex, "hello")
-        if val=="ac":
-          ex.hallprovost_permission=True
-        elif val1=="wa":
-            ex.hallprovost_permission=False
-        ex.save()
         vs=request.POST.get("hall_name")
-        data=permission_model.objects.filter(hall_name=vs,hallprovost_permission=0).last()
-        context={'data':data }
-        #return HttpResponse(context)
-        return render(request,  "hallprovost/hallprovost_home.html", context)
-        
-    else:
+        ex=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).first()
+        if val=="ac":
+            ex.hallprovost_permission=True
+            ex.save()
+            exists=permission_model.objects.filter(hall_name=vs,hallprovost_permission=False).exists()
+            print(exists, "ac")
+            if exists== True:
+                data=permission_model.objects.filter(hall_name=vs, hallprovost_permission=False)
+                context={'data':data, }
+                return render(request,  "hallprovost/hallprovost_home.html", context)
+            else:
+                msg="no student has registered"
+                return render(request,  "hallprovost/hallprovost_home.html", {'msg':msg})
+        if val1=="wa":
+            permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            course_model.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            
+            exists=permission_model.objects.filter(hall_name=vs, hallprovost_permission=False).exists()
+            if exists== True:
+                data=permission_model.objects.filter(hall_name=vs ,hallprovost_permission=False)
+                context={'data':data, }
+                return render(request,  "hallprovost/hallprovost_home.html", context)
+            else:
+                msg="no student has registered"
+                return render(request,  "hallprovost/hallprovost_home.html", {'msg':msg})
         return HttpResponse("val")

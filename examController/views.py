@@ -19,8 +19,11 @@ def examcontroller_login(request):
             if exists:
                 v=examcontroller.objects.filter(email=get_email)
                 vs=v.last().dept_name
-                data=permission_model.objects.filter(examcontroller_permission=False)
-               
+                data=permission_model.objects.filter(examcontroller_permission=False, hallprovost_permission=True, chairman_permission=True)
+                data1=permission_model.objects.filter(examcontroller_permission=False, hallprovost_permission=True, chairman_permission=True).exists()
+                if data1==False:
+                    msg="No student has complete his/her registration"
+                    return render(request,  "examcontroller/examcontroller_home.html", {'msg':msg})
                 context={'data':data, }
                 print(data)
                 return render(request,  "examcontroller/examcontroller_home.html", context)
@@ -53,7 +56,7 @@ def examcontroller_get_info(request):
     else:
         return HttpResponse("method not allowed")
 
-def examcontroller_emnei(request):
+def examcontroller_ac(request):
     if request.method=="POST":
         val=request.POST.get("ac")
         val1=request.POST.get("wa")
@@ -62,15 +65,29 @@ def examcontroller_emnei(request):
         print(val, val1, regi_no, semester_no)
         ex=permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).first()
         
-        print(ex, "hello")
         if val=="ac":
-          ex.examcontroller_permission=True
-        elif val1=="wa":
-            ex.examcontroller_permission=False
-        ex.save()
-        data=permission_model.objects.filter(examcontroller_permission=0)
-        context={'data':data, }
-        return render(request,  "examcontroller/examcontroller_home.html", context)
-        
-    else:
+            ex.examcontroller_permission=True
+            ex.save()
+            vs=request.POST.get("dept_name")
+            exists=permission_model.objects.filter(examcontroller_permission=False, hallprovost_permission=True, chairman_permission=True).exists()
+            if exists== True:
+                data=permission_model.objects.filter(examcontroller_permission=False, hallprovost_permission=True, chairman_permission=True)
+                context={'data':data, }
+                return render(request,  "examcontroller/examcontroller_home.html", context)
+            else:
+                msg="no student has registered"
+                return render(request,  "examcontroller/examcontroller_home.html", {'msg':msg})
+        if val1=="wa":
+            permission_model.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            registration1.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            course_model.objects.filter(regi_no=regi_no, semester_no=semester_no).delete()
+            
+            exists=permission_model.objects.filter( examcontroller_permission=False, hallprovost_permission=True, chairman_permission=True).exists()
+            if exists== True:
+                data=permission_model.objects.filter( examcontroller_permission=False, hallprovost_permission=True, chairman_permission=True)
+                context={'data':data, }
+                return render(request,  "examcontroller/examcontroller_home.html", context)
+            else:
+                msg="no student has registered"
+                return render(request,  "examcontroller/examcontroller_home.html", {'msg':msg})
         return HttpResponse("val")

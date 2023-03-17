@@ -2,6 +2,7 @@ from django.urls import path
 from adduser import views 
 
 urlpatterns = [
+    path('home', views.home, name="home"),
     path('', views.home),
     #path('login/', views.doLogin, name='login'),
     path('add_student/',views.add_student,name="add_student"),

@@ -18,7 +18,7 @@
               .card {
                 margin-left: 400px;
                 margin-right: auto;
-                margin-top: 100px;
+                margin-top: 10px;
                 justify-content: center;
                 display: block;
                 width: 38%;
@@ -81,7 +81,7 @@
       </tr>
       
     </table>
-    <form method="post" action="{% url 'examcontroller_emnei' %}">
+    <form method="post" action="{% url 'examcontroller_ac' %}">
       {% csrf_token %}
       <br>
       <input type="hidden" name="dept_name" value="{{all_data.dept_name}}"/>
@@ -89,7 +89,8 @@
       <input type="hidden" name="semester_no" value="{{all_data.semester_no}}"/>
       <button name="ac" value="ac" style=" background-color:green;
                     border:none; height: 40px; color:aliceblue; ">Accepeted</button>
-                  
+                    <button name="wa" value="wa" style=" background-color:red;
+                    border:none; height: 40px; color:aliceblue; ">Rejected</button>            
       
     </form>
   </div>

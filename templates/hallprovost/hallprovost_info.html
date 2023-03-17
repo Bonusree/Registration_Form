@@ -16,9 +16,9 @@
                 border: 1px solid;
               }
               .card {
-                margin-left: 400px;
+                margin-left: 300px;
                 margin-right: auto;
-                margin-top: 100px;
+                margin-top: 10px;
                 justify-content: center;
                 display: block;
                 width: 38%;
@@ -29,6 +29,7 @@
   </head>
   <body>
     <div class="card">
+     
     <table >
       <tr>
         <td>Name</td>
@@ -81,7 +82,7 @@
       </tr>
       
     </table>
-    <form method="post" action="{% url 'hallprovost_emnei' %}">
+    <form method="post" action="{% url 'hallprovost_ac' %}">
       {% csrf_token %}
       <br>
       <input type="hidden" name="dept_name" value="{{all_data.dept_name}}"/>
@@ -90,7 +91,8 @@
       <button name="ac" value="ac" style=" background-color:green;
                     border:none; height: 40px; color:aliceblue; ">Accepeted</button>
                   
-      
+      <button name="wa" value="wa" style=" background-color:red;
+              border:none; height: 40px; color:aliceblue; ">Rejected</button>
     </form>
   </div>
   

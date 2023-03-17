@@ -11,14 +11,45 @@
         <link rel="stylesheet" href="{% static 'style.css' %}" />
         <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
         <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <style>
             .f
         {
             margin-top: 110px;
             margin-left: 300px;
         }
-        button
+        .t_c{
+          padding: 10px 20px;
+          overflow: auto;
+          color: aliceblue;
+          background-color: rgb(3, 102, 94);
+          border: solid 3px rgb(15, 165, 152);;
+      }
+     .t_c img{
+      float: left;
+      height: 70px;
+      width: auto;
+     }
+      .bt{
+        float: right;
+        font-size: 20px;
+        text-align: center;
+        color:rgb(3, 102, 94);
+        border-radius: 20px;
+        background-color: aliceblue;
+        margin: 7px;
+        text-decoration: none;
+        padding: 10px 15px;
+      }
+      .content
+      {
+        float: left;
+       padding-left: 10px;
+      }
+        .bn
         {
+          
           background-color:  rgb(128, 5, 62);
             color: white;
             padding: 11px 145px;
@@ -29,23 +60,8 @@
             border-radius: 5px;
             margin:20px;
         }
-        .a1:link, .a1:visited {
-            background-color:  rgb(128, 5, 62);
-            color: white;
-            padding: 10px 300px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            border: solid 3px rgb(156, 39, 93);
-            border-radius: 5px;
-            margin:20px;
-          }
-          
-          .a1:hover, .a1:active {
-            background-color: rgb(3, 102, 94);
-            border:none;
-          }
-          button:hover, button:active {
+        
+          .bn:hover, .bn:active {
             background-color: rgb(3, 102, 94);
             border:solid 3px rgb(68, 194, 183);
           }
@@ -54,8 +70,18 @@
 <body>
     
         
-        <div class="top_card">
-            <h1>Welcome id:{{regi_no}}</h1>
+        <div class="t_c">
+          <form action="{% url 'home' %}"  method="post">
+            {% csrf_token %}
+            <button class="bt" ><i class="fa fa-fw fa-user"></i> log out</button>
+          </form>
+           
+            <img src="/static/images/comilla.jpg">
+            <div class="content">
+            <b style="font-size: 30px;">Comilla University</b><br>
+             <b style="font-size:20px">Computer Science and Engineering</b>
+          </div>
+          
         </div>
         
         <div class="f">
@@ -69,7 +95,7 @@
         <form action="{% url 'get_admit_card' %}"  method="post">
             {% csrf_token %}
           <input type="hidden" name="regi_no" value="{{regi_no}}"/>
-          <button><label for="text">Semester No:</label>
+          <button class="bn"><label for="text">Semester No:</label>
                 <input type="text" id="" maxlength="60" size="40"
                     placeholder="" name="semester_no" required>
           <h2>Download Admit</h2></button>
@@ -78,7 +104,7 @@
         <form action="{% url 'student_home' %}"  method="post">
           {% csrf_token %}
         
-        <button style="width:70%; height: 100px;">
+        <button class="bn" style="width:70%; height: 100px;">
         <h2>Register Here</h2></button>
       </form>
       
