@@ -27,9 +27,9 @@ WKHTMLTOPDF_CMD = '/path/to/my/wkhtmltopdf'
 SECRET_KEY = 'django-insecure-rdkds#6*u_!&fmi93npvv4g63ey+_k=bm!ti%sa)f3p#3)s_*q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['bonusree.pythonanywhere.com']
 
 
 # Application definition
